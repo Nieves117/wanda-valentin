@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wanda 💚</title>
 
 <style>
@@ -24,6 +25,21 @@ button{
     padding:10px 20px;
     margin:10px;
     cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#00ff00;
+    color:black;
+}
+
+input{
+    background:black;
+    border:2px solid #00ff00;
+    color:#00ff00;
+    padding:8px;
+    font-size:16px;
+    text-align:center;
 }
 </style>
 </head>
@@ -31,31 +47,34 @@ button{
 <body>
 
 <div id="login">
-<h2>🔐 ACCESO RESTRINGIDO</h2>
-<input type="password" id="password">
-<br><br>
-<button id="btnLogin">Ingresar</button>
-<p id="error"></p>
+    <h2>🔐 ACCESO RESTRINGIDO</h2>
+    <p>Ingresa la fecha especial...</p>
+    <input type="password" id="password" placeholder="DD/MM/AAAA">
+    <br><br>
+    <button id="btnLogin">Ingresar</button>
+    <p id="error"></p>
 </div>
 
 <div id="question" class="hidden">
-<h2>💚 Wanda...</h2>
-<p>¿Quieres ser mi San Valentín?</p>
-<button id="btnYes">SI 💚</button>
-<button id="btnNo">NO 💀</button>
+    <h2>💚 Wanda...</h2>
+    <p>¿Quieres ser mi San Valentín?</p>
+    <button id="btnYes">SI 💚</button>
+    <button id="btnNo">NO 💀</button>
 </div>
 
 <div id="accepted" class="hidden">
-<h1>💚 SISTEMA COMPROMETIDO 💚</h1>
-<p>Wanda ha aceptado ser mi San Valentín 💘</p>
+    <h1>💚 SISTEMA COMPROMETIDO 💚</h1>
+    <p>Wanda ha aceptado ser mi San Valentín 💘</p>
+    <p>El ingeniero oficialmente está enamorado ❤️</p>
 </div>
 
 <audio id="loveSong">
-<source src="gardenias.mp3" type="audio/mpeg">
+    <source src="gardenias.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 
+// BOTÓN INGRESAR
 document.getElementById("btnLogin").addEventListener("click", function(){
 
     let pass = document.getElementById("password").value.trim();
@@ -69,6 +88,7 @@ document.getElementById("btnLogin").addEventListener("click", function(){
 
 });
 
+// BOTÓN SÍ
 document.getElementById("btnYes").addEventListener("click", function(){
 
     document.getElementById("question").classList.add("hidden");
@@ -76,17 +96,29 @@ document.getElementById("btnYes").addEventListener("click", function(){
 
     let audio = document.getElementById("loveSong");
     audio.currentTime = 0;
-    audio.play().catch(err => console.log(err));
+
+    audio.play().then(()=>{
+        console.log("Reproduciendo música 💚");
+    }).catch(err=>{
+        console.log("Error audio:", err);
+    });
 
 });
 
+// BOTÓN NO
 document.getElementById("btnNo").addEventListener("click", function(){
-    alert("⚠ Sistema corrompido ⚠");
-    location.reload();
+
+    document.body.style.background = "red";
+    document.body.style.color = "black";
+    document.body.innerHTML = "<h1>⚠ SISTEMA CORROMPIDO ⚠</h1>";
+
+    setTimeout(()=>{
+        location.reload();
+    },2000);
+
 });
 
 </script>
 
 </body>
 </html>
-
