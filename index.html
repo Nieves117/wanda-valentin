@@ -3,61 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Acceso Restringido</title>
+<title>Access Terminal</title>
 
 <style>
 body{
-    margin:0;
-    padding:0;
     background:black;
     color:#00ff88;
-    font-family: "Courier New", monospace;
-    overflow:hidden;
+    font-family:monospace;
     text-align:center;
-}
-
-canvas{
-    position:fixed;
-    top:0;
-    left:0;
-    z-index:-1;
-}
-
-.container{
-    margin-top:15%;
+    padding-top:100px;
+    overflow:hidden;
 }
 
 input{
+    padding:10px;
     background:black;
     border:1px solid #00ff88;
     color:#00ff88;
-    padding:10px;
-    font-size:16px;
     text-align:center;
 }
 
 button{
-    background:#00ff88;
-    color:black;
-    border:none;
     padding:10px 20px;
     margin:10px;
+    background:black;
+    border:1px solid #00ff88;
+    color:#00ff88;
     cursor:pointer;
-    font-weight:bold;
 }
 
-.hidden{ display:none; }
+.hidden{
+    display:none;
+}
 
 .glitch{
     font-size:28px;
-    font-weight:bold;
-    animation: glitch 1s infinite;
+    animation: glitch 0.5s infinite;
 }
 
 @keyframes glitch{
-    0%{text-shadow:2px 2px red;}
-    50%{text-shadow:-2px -2px blue;}
-    100%{text-shadow:2px 2px red;}
+    0%{text-shadow:2px 2px #00ff88;}
+    50%{text-shadow:-2px -2px #008844;}
+    100%{text-shadow:2px 2px #00ff88;}
 }
 
 .denied{
@@ -75,84 +62,49 @@ button{
 
 <body>
 
-<canvas id="matrix"></canvas>
+<h2>INICIANDO SISTEMA...</h2>
+<p>Ingresa la clave secreta:</p>
 
-<div class="container">
-    <h2>🔐 SISTEMA PROTEGIDO</h2>
-    <p>Ingrese la fecha de inicio de nuestra relación...</p>
-    <input type="password" id="password" placeholder="DD/MM/AAAA">
-    <br>
-    <button onclick="checkPassword()">ACCEDER</button>
-    <div id="errorMsg"></div>
+<input type="password" id="password" placeholder="DD/MM/AAAA">
+<br>
+<button onclick="checkPassword()">ACCEDER</button>
 
-    <div id="secret" class="hidden">
-        <h1 class="glitch">💚 ACCESO CONCEDIDO 💚</h1>
-        <h2>Wanda...</h2>
-        <p>Sistema analizando sentimientos...</p>
-        <p>Resultado: Amor verdadero detectado ❤️</p>
-        <h2>¿Quieres ser mi San Valentín? 💘</h2>
-        <button onclick="accepted()">ACEPTO 💚</button>
-        <button onclick="rejected()">NO 💀</button>
-    </div>
+<div id="errorMsg"></div>
+
+<div id="secret" class="hidden">
+    <h2 class="glitch">WANDA DETECTADA 💚</h2>
+    <p>¿Aceptas ser mi San Valentín?</p>
+    <button onclick="accepted()">SI 💚</button>
+    <button onclick="rejected()">NO 💀</button>
 </div>
 
-<audio id="loveSong" 
-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
-</audio>
+<audio id="loveSong" src="gardenias.mp3"></audio>
 
 <script>
 
-// MATRIX
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
-
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
-
-const letters = "01WANDA❤️";
-const fontSize = 16;
-const columns = canvas.width/fontSize;
-const drops = [];
-
-for(let x=0; x<columns; x++) drops[x]=1;
-
-function draw(){
-    ctx.fillStyle="rgba(0,0,0,0.05)";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle="#00ff88";
-    ctx.font=fontSize+"px monospace";
-
-    for(let i=0;i<drops.length;i++){
-        const text=letters.charAt(Math.floor(Math.random()*letters.length));
-        ctx.fillText(text,i*fontSize,drops[i]*fontSize);
-        if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
-            drops[i]=0;
-        drops[i]++;
-    }
-}
-setInterval(draw,33);
-
-// PASSWORD
 function checkPassword(){
     const pass = document.getElementById("password").value.trim();
     const errorDiv = document.getElementById("errorMsg");
 
-    if(pass==="05/09/2024"||pass==="5/9/2024"||pass==="05092024"){
+    if(pass === "05/09/2024"){
         document.getElementById("secret").classList.remove("hidden");
-        errorDiv.innerHTML="";
-    }else{
-        errorDiv.innerHTML="⛔ ACCESS DENIED ⛔";
-        errorDiv.className="denied";
+        errorDiv.innerHTML = "";
+    } else {
+        errorDiv.innerHTML = "⛔ ACCESS DENIED ⛔";
+        errorDiv.className = "denied";
+
+        if(navigator.vibrate){
+            navigator.vibrate(200);
+        }
     }
 }
 
-// ACCEPT
 function accepted(){
-    const song=document.getElementById("loveSong");
-    song.currentTime=30;
-    song.play();
+    const song = document.getElementById("loveSong");
+    song.currentTime = 0;
+    song.play().catch(()=>{});
 
-    document.body.innerHTML=`
+    document.body.innerHTML = `
     <div style="display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;background:black;color:#00ff88;font-family:monospace;text-align:center;">
         <h1 class="glitch">💚 SISTEMA COMPROMETIDO 💚</h1>
         <h2>Wanda ha aceptado ser mi San Valentín 💘</h2>
@@ -160,18 +112,20 @@ function accepted(){
     </div>`;
 }
 
-// REJECT
 function rejected(){
-    document.body.innerHTML=`
-    <div style="background:black;color:red;height:100vh;display:flex;justify-content:center;align-items:center;flex-direction:column;font-family:monospace;">
-        <h1 style="animation: glitchRed 0.2s infinite;">⚠ SISTEMA CORROMPIDO ⚠</h1>
-        <h2>ERROR 404: CORAZÓN NO ENCONTRADO</h2>
-        <p>Reiniciando sistema...</p>
+    document.body.innerHTML = `
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;background:black;color:red;font-family:monospace;text-align:center;">
+        <h1 style="animation: glitchRed 0.3s infinite;">⚠ SISTEMA CORROMPIDO ⚠</h1>
+        <p>Error fatal... Reiniciando...</p>
     </div>`;
 
-    setTimeout(()=>{ location.reload(); },3000);
+    setTimeout(()=>{
+        location.reload();
+    },3000);
 }
+
 </script>
 
 </body>
 </html>
+
